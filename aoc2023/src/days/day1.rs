@@ -28,24 +28,24 @@ impl Day for Day1 {
     }
 
     fn part2(&self) -> i32 {
+        let replacements = vec![
+            ("one", "o1e"),
+            ("two", "t2o"),
+            ("three", "t3e"),
+            ("four", "f4r"),
+            ("five", "f5e"),
+            ("six", "s6x"),
+            ("seven", "s7n"),
+            ("eight", "e8t"),
+            ("nine", "n9n"),
+        ];
+
         self.lines
             .iter()
             .filter(|line| !line.is_empty())
             .map(|line| {
-                let replacements = vec![
-                    ("one", "o1e"),
-                    ("two", "t2o"),
-                    ("three", "t3e"),
-                    ("four", "f4r"),
-                    ("five", "f5e"),
-                    ("six", "s6x"),
-                    ("seven", "s7n"),
-                    ("eight", "e8t"),
-                    ("nine", "n9n")
-                ];
-                
                 let mut new_line = line.clone();
-                for rep in replacements {
+                for rep in &replacements {
                     new_line = new_line.replace(rep.0, rep.1);
                 }
 
