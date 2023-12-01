@@ -6,7 +6,7 @@ mod days;
 use days::*;
 
 fn main() {
-    println!("Welcome to Advent Of Code 2023!\n");
+    println!("\nWelcome to Advent Of Code 2023!\n");
 
     // Vector of all days
     let all_days: Vec<Box<dyn Day>> = vec![
