@@ -1,5 +1,6 @@
 use crate::day::Day;
 
+/// I tried solving the Day 1 (both parts) using mostly iterators and functional programming style
 pub struct Day1 {
     pub lines: Vec<String>,
 }
