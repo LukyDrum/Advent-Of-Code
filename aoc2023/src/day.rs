@@ -12,6 +12,7 @@ pub trait Day {
             .unwrap()
             .split('\n')
             .map(|s| String::from_str(s).unwrap())
+            .filter(|s| !s.is_empty())
             .collect()
     }
 }

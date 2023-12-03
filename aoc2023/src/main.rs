@@ -11,6 +11,7 @@ fn main() {
     // Vector of all days
     let all_days: Vec<Box<dyn Day>> = vec![
         Day1::new_box(),
+        Day2::new_box(),
     ];
 
     // This will print the output in a table
