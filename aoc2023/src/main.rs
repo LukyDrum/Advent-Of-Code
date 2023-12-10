@@ -20,23 +20,28 @@ fn main() {
     ];
 
     // This will print the output in a table
-    println!("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
-    println!("┃ Day \t┃ Part 1 \t┃ Part 2 \t ┃");
-    println!("┡━━━━━━━┯━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━━━━┩");
+    println!("┏━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓");
+    println!("┃ Day \t┃ Part 1 \t┃ Part 2 \t ┃ Time \t ┃");
+    println!("┡━━━━━━━╇━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩");
 
-    let time = Instant::now();
-
+    let mut total_time = 0;
     let mut i = 1;
     for d in all_days {
         print!("│ {}\t│ ", i);
-        println!("\t{}\t│\t{}\t │", d.part1(), d.part2());
+        let before_day = Instant::now();
+        let part1 = d.part1();
+        let part2 = d.part2();
+        let time = before_day.elapsed().as_millis();
+        println!("\t{}\t│\t{}\t │\t{} ms\t │", part1, part2, time);
+
+        total_time += time;
 
         i += 1;
     }
 
-    println!("├───────┴───────────────┴────────────────┤");
-    println!("│ Time: \t{} ms \t\t\t │", time.elapsed().as_millis());
-    println!("└────────────────────────────────────────┘\n");
+    println!("├───────┴───────────────┴────────────────┼───────────────┤");
+    println!("│\t\t\t\t\t │\t{} ms\t │", total_time);
+    println!("└────────────────────────────────────────┴───────────────┘\n");
 
     
 }
