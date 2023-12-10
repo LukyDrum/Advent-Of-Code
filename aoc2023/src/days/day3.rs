@@ -28,7 +28,7 @@ impl Day for Day3 {
     fn part1(&self) -> i32 {
         let mut char_matrix: Vec<Vec<u8>> = Vec::new();
 
-        let example_lines = vec![
+        let _example_lines = vec![
             "467..114..",
             "...*......",
             "..35..633.",
@@ -70,7 +70,7 @@ impl Day for Day3 {
     fn part2(&self) -> i32 {
         let mut char_matrix: Vec<Vec<u8>> = Vec::new();
 
-        let example_lines = vec![
+        let _example_lines = vec![
             "467..114..",
             "...*......",
             "..35..633.",
@@ -97,7 +97,7 @@ impl Day for Day3 {
         let gears = self.get_gears(&char_matrix);
 
         let mut ans = 0;
-        let mut adj_numbers: Vec<i32> = vec![];
+        let mut adj_numbers: Vec<i32>;
         for gear in &gears {
             adj_numbers = vec![];
             for num in &numbers {
@@ -122,10 +122,10 @@ impl Day3 {
         let mut gears: Vec<Gear> = Vec::new();
 
         let mut row_index: i32 = 0;
-        let mut col_index: i32 = 0;
+        let mut col_index: i32;
         for row in char_matrix {
             col_index = 0;
-            for col in row {
+            for _col in row {
                 let c = char_matrix[row_index as usize][col_index as usize] as char;
 
                 if c == '*' {
@@ -186,7 +186,7 @@ impl Day3 {
         let mut num: String = "".to_string();
 
         let mut row_index: i32 = 0;
-        let mut col_index: i32 = 0;
+        let mut col_index: i32;
 
         let mut start_col = 0;
 
