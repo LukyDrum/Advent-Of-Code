@@ -15,5 +15,5 @@ pub trait Day {
             .filter(|s| !s.is_empty())
             .collect()
     }
-    fn setup(&self) -> () {}
+    fn setup(&mut self) -> () {}
 }

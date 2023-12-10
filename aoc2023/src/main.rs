@@ -11,7 +11,7 @@ fn main() {
     println!("\n* Welcome to Advent Of Code 2023! *\n");
 
     // Vector of all days
-    let all_days: Vec<Box<dyn Day>> = vec![
+    let mut all_days: Vec<Box<dyn Day>> = vec![
         Day1::new_box(),
         Day2::new_box(),
         Day3::new_box(),
@@ -26,9 +26,10 @@ fn main() {
 
     let mut total_time = 0;
     let mut i = 1;
-    for d in all_days {
+    for d in &mut all_days {
         print!("│ {}\t│ ", i);
         let before_day = Instant::now();
+        d.setup();
         let part1 = d.part1();
         let part2 = d.part2();
         let time = before_day.elapsed().as_millis();
