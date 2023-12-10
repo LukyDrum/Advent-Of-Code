@@ -21,7 +21,7 @@ impl Day for Day4 {
         self.lines
             .iter()
             .map(|line| {
-                let scratchcard = self.get_numbers_from_line(line);
+                let scratchcard = get_scratchcard_from_line(line);
 
                 let mut value = 0;
                 for wnum in &scratchcard.winning {
@@ -52,30 +52,28 @@ impl Day for Day4 {
     }
 }
 
-impl Day4 {
-    fn get_numbers_from_line(&self, line: &String) -> Scratchcard {
-        let split: Vec<&str> = line.split(":").collect();
-        let numbers: Vec<&str> = split[1].split(" | ").filter(|n| !n.is_empty()).collect();
+fn get_scratchcard_from_line(line: &String) -> Scratchcard {
+    let split: Vec<&str> = line.split(":").collect();
+    let numbers: Vec<&str> = split[1].split(" | ").filter(|n| !n.is_empty()).collect();
 
-        let mut scratchcard: Scratchcard = Scratchcard {
-            winning: vec![],
-            my_numbers: vec![],
-            copies: 1,
-        };
+    let mut scratchcard: Scratchcard = Scratchcard {
+        winning: vec![],
+        my_numbers: vec![],
+        copies: 1,
+    };
 
-        scratchcard.winning = numbers[0]
-            .split_ascii_whitespace()
-            .map(|n| n.parse::<i32>().unwrap())
-            .collect();
+    scratchcard.winning = numbers[0]
+        .split_ascii_whitespace()
+        .map(|n| n.parse::<i32>().unwrap())
+        .collect();
 
-        scratchcard.my_numbers = numbers[1]
-            .split_ascii_whitespace()
-            .map(|n| n.parse::<i32>().unwrap())
-            .collect();
+    scratchcard.my_numbers = numbers[1]
+        .split_ascii_whitespace()
+        .map(|n| n.parse::<i32>().unwrap())
+        .collect();
 
-        scratchcard.winning.sort_unstable();
-        scratchcard.my_numbers.sort_unstable();
+    scratchcard.winning.sort_unstable();
+    scratchcard.my_numbers.sort_unstable();
 
-        scratchcard
-    }
+    scratchcard
 }
