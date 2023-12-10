@@ -1,3 +1,5 @@
+use std::time::Instant;
+
 use day::Day;
 
 mod day;
@@ -9,12 +11,20 @@ fn main() {
     println!("\n* Welcome to Advent Of Code 2023! *\n");
 
     // Vector of all days
-    let all_days: Vec<Box<dyn Day>> = vec![Day1::new_box(), Day2::new_box(), Day3::new_box(), Day4::new_box()];
+    let all_days: Vec<Box<dyn Day>> = vec![
+        Day1::new_box(),
+        Day2::new_box(),
+        Day3::new_box(),
+        Day4::new_box(),
+    ];
 
     // This will print the output in a table
     println!("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
     println!("┃ Day \t┃ Part 1 \t┃ Part 2 \t ┃");
     println!("┡━━━━━━━┯━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━━━━┩");
+
+    let time = Instant::now();
+
     let mut i = 1;
     for d in all_days {
         print!("│ {}\t│ ", i);
@@ -23,5 +33,9 @@ fn main() {
         i += 1;
     }
 
-    println!("└───────┴───────────────┴────────────────┘\n")
+    println!("├───────┴───────────────┴────────────────┤");
+    println!("│ Time: \t{} ms \t\t\t │", time.elapsed().as_millis());
+    println!("└────────────────────────────────────────┘\n");
+
+    
 }
