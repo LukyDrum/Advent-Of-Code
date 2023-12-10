@@ -68,11 +68,81 @@ impl Day for Day3 {
     }
 
     fn part2(&self) -> i32 {
-        -1
+        let mut char_matrix: Vec<Vec<u8>> = Vec::new();
+
+        let example_lines = vec![
+            "467..114..",
+            "...*......",
+            "..35..633.",
+            "......#...",
+            "617*......",
+            ".....+.58.",
+            "..592.....",
+            "......755.",
+            "...$.*....",
+            ".664.598..",
+            "..........",
+            "......$42.",
+            "..........",
+        ];
+
+        for line in &self.lines {
+            let mut bytes = line.clone().into_bytes();
+            bytes.push(b'\n');
+
+            char_matrix.push(bytes);
+        }
+
+        let numbers = self.get_numbers(&char_matrix);
+        let gears = self.get_gears(&char_matrix);
+
+        let mut ans = 0;
+        let mut adj_numbers: Vec<i32> = vec![];
+        for gear in &gears {
+            adj_numbers = vec![];
+            for num in &numbers {
+                if gear.row == num.row - 1 || gear.row == num.row || gear.row == num.row + 1 {
+                    if gear.col >= num.start_col - 1 && gear.col <= num.end_col + 1 {
+                        adj_numbers.push(num.value);
+                    }
+                }
+            }
+
+            if adj_numbers.len() == 2 {
+                ans += adj_numbers[0] * adj_numbers[1];
+            }
+        }
+
+        ans
     }
 }
 
 impl Day3 {
+    fn get_gears(&self, char_matrix: &Vec<Vec<u8>>) -> Vec<Gear> {
+        let mut gears: Vec<Gear> = Vec::new();
+
+        let mut row_index: i32 = 0;
+        let mut col_index: i32 = 0;
+        for row in char_matrix {
+            col_index = 0;
+            for col in row {
+                let c = char_matrix[row_index as usize][col_index as usize] as char;
+
+                if c == '*' {
+                    gears.push(Gear {
+                        row: row_index,
+                        col: col_index,
+                    });
+                }
+
+                col_index += 1;
+            }
+
+            row_index += 1;
+        }
+
+        gears
+    }
 
     fn is_position_adjecent_to_symbol(
         &self,
