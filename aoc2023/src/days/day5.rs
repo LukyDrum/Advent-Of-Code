@@ -20,6 +20,29 @@ impl Map {
 
         self.destination_start + offset
     }
+
+    fn source_last(&self) -> i64 {
+        self.source_start + self.length - 1
+    }
+}
+
+#[derive(Clone, Copy)]
+struct Range {
+    start: i64,
+    length: i64,
+}
+
+impl Range {
+    fn first(&self) -> i64 {
+        self.start
+    }
+    fn last(&self) -> i64 {
+        self.start + self.length - 1
+    }
+
+    fn from_start_end(start: i64, end: i64) -> Range {
+        Range { start: start, length: end - start + 1 }
+    }
 }
 
 pub struct Day5 {
@@ -49,6 +72,35 @@ impl Day for Day5 {
     }
 
     fn part2(&self) -> i32 {
+        let mut ranges: Vec<Range> = Vec::new();
+        let mut i = 0;
+        while i < self.seeds.len() {
+            ranges.push(Range { start: self.seeds[i], length: self.seeds[i + 1] });
+
+            i += 2;
+        }
+
+        for range in ranges {
+            let mut split_points = vec![range.first()];
+            for map in &self.sections[0] {
+                if map.contains(range.last()) || map.source_start > range.last()  {
+                    split_points.push(range.last());
+                    break;
+                }
+                else {
+                    if map.source_start > range.start {
+                        split_points.push(map.source_start);
+                    }
+                    split_points.push(map.source_last());
+                }
+            }
+            if *split_points.last().unwrap() != range.last() {
+                split_points.push(range.last());
+            }
+
+            println!("{:?}", split_points);
+        }
+
         -1
     }
 }
