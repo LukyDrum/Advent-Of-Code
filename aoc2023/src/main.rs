@@ -32,8 +32,10 @@ fn main() {
         d.setup();
         let part1 = d.part1();
         let part2 = d.part2();
+
+        print!("\t{}\t│\t{}\t │\t", part1, part2);
         let time = before_day.elapsed().as_millis();
-        println!("\t{}\t│\t{}\t │\t{} ms\t │", part1, part2, time);
+        println!("{} ms\t │", time);
 
         total_time += time;
 

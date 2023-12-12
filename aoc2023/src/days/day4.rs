@@ -13,7 +13,7 @@ pub struct Day4 {
 impl Day for Day4 {
     fn new() -> Self {
         Day4 {
-            lines: Self::read_input(4),
+            lines: Self::read_input(4, false),
         }
     }
 

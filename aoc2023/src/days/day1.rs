@@ -8,7 +8,7 @@ pub struct Day1 {
 impl Day for Day1 {
     fn new() -> Self {
         Day1 {
-            lines: Self::read_input(1),
+            lines: Self::read_input(1, false),
         }
     }
 

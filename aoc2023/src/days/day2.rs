@@ -11,7 +11,7 @@ pub struct Day2 {
 impl Day for Day2 {
     fn new() -> Self {
         Day2 {
-            lines: Self::read_input(2),
+            lines: Self::read_input(2, false),
         }
     }
 
