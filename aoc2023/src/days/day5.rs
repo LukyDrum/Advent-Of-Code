@@ -15,14 +15,31 @@ impl Map {
         false
     }
 
+    fn reverse_contains(&self, value: i64) -> bool {
+        if value >= self.destination_start && value < self.destination_start + self.length {
+            return true;
+        }
+        false
+    }
+
     fn translate(&self, value: i64) -> i64 {
         let offset = value - self.source_start;
 
         self.destination_start + offset
     }
 
+    fn reverse_translate(&self, value: i64) -> i64 {
+        let offset = value - self.destination_start;
+
+        self.source_start + offset
+    }
+
     fn source_last(&self) -> i64 {
         self.source_start + self.length - 1
+    }
+
+    fn destination_last(&self) -> i64 {
+        self.destination_start + self.length - 1
     }
 }
 
@@ -43,6 +60,17 @@ impl Range {
     fn from_start_end(start: i64, end: i64) -> Range {
         Range { start: start, length: end - start + 1 }
     }
+
+    fn contains(&self, value: i64) -> bool {
+        if value >= self.first() && value <= self.last() {
+            return true;
+        }
+        false
+    }
+
+    fn print(&self) {
+        print!("{} -> {}", self.first(), self.last());
+    }
 }
 
 pub struct Day5 {
@@ -53,7 +81,7 @@ pub struct Day5 {
 
 impl Day for Day5 {
     fn new() -> Self {
-        let lines = Self::read_input(5);
+        let lines = Self::read_input(5, false);
 
         Day5 {
             lines: lines,
@@ -72,38 +100,59 @@ impl Day for Day5 {
     }
 
     fn part2(&self) -> i32 {
-        let mut ranges: Vec<Range> = Vec::new();
-        let mut i = 0;
-        while i < self.seeds.len() {
-            ranges.push(Range { start: self.seeds[i], length: self.seeds[i + 1] });
+        let mut ranges: Vec<Range> = self.get_seed_ranges();
 
-            i += 2;
-        }
+        // println!("Reverse brute {}", self.part2_reverse_brute());
 
-        for range in ranges {
-            let mut split_points = vec![range.first()];
-            for map in &self.sections[0] {
-                if map.contains(range.last()) || map.source_start > range.last()  {
-                    split_points.push(range.last());
-                    break;
-                }
-                else {
-                    if map.source_start > range.start {
-                        split_points.push(map.source_start);
+        for sec in &self.sections {
+            let mut new_ranges: Vec<Range> = Vec::new();
+
+            for range in &ranges {
+                let mut splits: Vec<i64> = Vec::new();
+                splits.push(range.first());
+
+                for map in sec {
+                    if range.contains(map.source_start) && range.first() != map.source_start {
+                        splits.push(map.source_start);
                     }
-                    split_points.push(map.source_last());
+                    if range.contains(map.source_last() + 1) {
+                        splits.push(map.source_last() + 1);
+                    }
+                }
+
+                if *splits.last().unwrap() != range.last() + 1 {
+                    splits.push(range.last() + 1);
+                }
+
+                
+                for i in 0..splits.len() - 1 {
+                    let start = splits[i];
+                    let end = splits[i + 1];
+                    if start == end {
+                        continue;
+                    }
+
+                    new_ranges.push(Range::from_start_end(start, end - 1));
                 }
             }
-            if *split_points.last().unwrap() != range.last() {
-                split_points.push(range.last());
+
+            for range in &mut new_ranges {
+                for map in sec {
+                    if map.contains(range.first()) {
+                        range.start = map.translate(range.start);
+                    }
+                }
             }
 
-            println!("{:?}", split_points);
+            ranges = new_ranges;
         }
+
+        let min = ranges.iter().map(|range| range.start).min().unwrap();
 
         -1
     }
 }
+
 
 impl Day5 {
     fn get_location_of_seed(&self, seed: i64) -> i64 {
@@ -122,6 +171,51 @@ impl Day5 {
         }
 
         value
+    }
+
+    fn get_seed_ranges(&self) -> Vec<Range> {
+        let mut ranges: Vec<Range> = Vec::new();
+        let mut i = 0;
+        while i < self.seeds.len() {
+            ranges.push(Range { start: self.seeds[i], length: self.seeds[i + 1] });
+
+            i += 2;
+        }
+
+        ranges
+    }
+
+    fn reverse_map_to_seed(&self, location: i64) -> i64 {
+        let mut value = location;
+        for sec in self.sections.iter().rev() {
+            for map in sec {
+                if map.reverse_contains(value) {
+                    value = map.reverse_translate(value);
+                    break;
+                }
+            }
+        }
+
+        value
+    }
+
+    fn part2_reverse_brute(&self) -> i32 {
+        let seed_ranges = self.get_seed_ranges();
+        let mut loc = 0;
+        let mut flag = true;
+        while flag {
+            let seed = self.reverse_map_to_seed(loc);
+            for range in &seed_ranges {
+                if range.contains(seed) {
+                    flag = false;
+                    break;
+                }
+            }
+
+            loc += 1;
+        }
+
+        (loc - 1) as i32
     }
 }
 
