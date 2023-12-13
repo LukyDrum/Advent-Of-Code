@@ -19,6 +19,7 @@ fn main() {
         Day5::new_box(),
         Day6::new_box(),
         Day7::new_box(),
+        Day8::new_box(),
     ];
 
     // This will print the output in a table
